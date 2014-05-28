@@ -1,0 +1,45 @@
+repos:
+    - diskimage-builder
+    - horizon
+    - tripleo-incubator
+    - python-keystoneclient
+    - python-glanceclient
+    - swift
+    - glance
+    - python-neutronclient
+    - python-ceilometerclient
+    - neutron
+    - python-heatclient
+    - python-swiftclient
+    - keystone
+    - cinder
+    - python-cinderclient
+    - nova
+    - python-ironicclient
+    - python-novaclient
+    - heat
+    - ironic
+    - tripleo-heat-templates
+    - tripleo-image-elements
+    - os-cloud-config
+
+gerrit_refs:
+    tripleo-incubator:
+        - 53/93553/7
+        - 68/95968/3
+
+    tripleo-heat-templates:
+        - 06/93806/1
+
+    tripleo-image-elements:
+        - 44/93844/3
+        - 81/94981/1
+
+    ironic:
+        - 31/93731/3
+
+    heat:
+        - 31/93931/2
+
+    diskimage-builder:
+        - 98/95598/1

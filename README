@@ -1,0 +1,24 @@
+This repository is a place for testers of full rack end-to-end TripleO
+runs to coordinate around reproducible deployments.
+
+repo_refs.yaml contains the various repos TripleO will clone and allows
+you to track in-flight Gerrit reviews that need to be pulled down as
+part of the deployment.
+
+To use:
+
+Ideally, maintain a local rc file with environment variables specific
+to your environment.  To view which you should be setting, see top of
+devtestrc.
+
+You'll also want to maintain a nodes.json and bm-network.json specific
+to your node inventory and seed/undercloud network topology. See examples.
+
+With your local overrides and nodes.json and bm-network.json in place, simply
+source devtestrc.  This will clone all required repos and patches every time
+its sourced.  To skip this part, set NO_SOURCE_PREP=1.  Note without this set,
+you'll likely lose local changes to the repos upon resourcing.
+
+Then you may simply run:
+
+devtest.sh  --trash-my-machine --nodes $PATH_TO/nodes.json --bm-networks $PATH_TO/bm-network.json

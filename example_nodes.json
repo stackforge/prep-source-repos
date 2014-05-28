@@ -1,0 +1,22 @@
+[{
+    "pm_password": "foo",
+    "mac": ["78:e7:d1:24:99:a5"],
+    "pm_addr": "10.22.51.66",
+    "pm_type": "pxe_ipmitool",
+    "memory": 98304,
+    "disk": 1600,
+    "arch": "amd64",
+    "cpu": 24,
+    "pm_user": "Administrator"
+},
+{
+    "pm_password": "AFDJHTVQ",
+    "mac": ["78:e7:d1:24:6f:c5"],
+    "pm_addr": "10.22.51.69",
+    "pm_type": "pxe_ipmitool",
+    "memory": 98304,
+    "disk": 1600,
+    "arch": "amd64",
+    "cpu": 24,
+    "pm_user": "Administrator"
+}]
