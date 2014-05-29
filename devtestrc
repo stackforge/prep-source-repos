@@ -22,7 +22,7 @@ export NODE_DISK=${NODE_DISK:-1600}
 export NeutronPublicInterface=eth2
 
 # Scale for overcloud compute/control.
-export OVERCLOUD_CONTROLSCALE=${OVERCLOUD_CONTROLSCALE:-"29"}
+export OVERCLOUD_CONTROLSCALE=${OVERCLOUD_CONTROLSCALE:-"1"}
 export OVERCLOUD_COMPUTESCALE=${OVERCLOUD_COMPUTESCALE:-"29"}
 
 # Specific to your network
