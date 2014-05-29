@@ -26,7 +26,7 @@ repos:
 gerrit_refs:
     tripleo-incubator:
         - 53/93553/7
-        - 68/95968/3
+        - 68/95968/4
 
     tripleo-heat-templates:
         - 06/93806/1
@@ -37,6 +37,7 @@ gerrit_refs:
 
     ironic:
         - 31/93731/3
+        - 98/96498/3
 
     heat:
         - 31/93931/2
