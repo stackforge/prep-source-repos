@@ -29,6 +29,10 @@ export OVERCLOUD_COMPUTESCALE=${OVERCLOUD_COMPUTESCALE:-"29"}
 export FLOATING_START="10.22.157.225"
 export FLOATING_END="10.22.157.254"
 export FLOATING_CIDR="10.22.157.244/27"
+
+# Be sure to create a large seed vm
+export SEED_CPU=24
+export SEED_MEM=24576
 ##### end
 
 if [[ -n "$PROXY" ]] ; then
