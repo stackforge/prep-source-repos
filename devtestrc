@@ -54,6 +54,7 @@ export DEVTEST_PERF_COMMENT="$(hostname): clean re-run, using USEast pypi mirror
 export NODE_ARCH=amd64
 export NODE_DIST=${NODE_DIST:-"ubuntu"}
 export DIB_RELEASE=trusty
+export USE_IRONIC=1
 
 # NOTE (adam_g): Limit cloud-init data sources to Ec2 to workaround
 #		 trusty cloud-init bug #1316475.
