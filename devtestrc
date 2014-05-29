@@ -61,7 +61,8 @@ export USE_IRONIC=1
 #		 Relies on https://review.openstack.org/#/c/95598/
 export DIB_CLOUD_INIT_DATASOURCES="Ec2"
 export UNDERCLOUD_DIB_EXTRA_ARGS="rabbitmq-server cloud-init-datasources"
-export OVERCLOUD_DIB_EXTRA_ARGS="rabbitmq-server cloud-init-datasources"
+export OVERCLOUD_CONTROL_DIB_EXTRA_ARGS="rabbitmq-server cloud-init-datasources"
+export OVERCLOUD_COMPUTE_DIB_EXTRA_ARGS="cloud-init-datasources"
 
 # NOTE (adam_g): Set a long timeout for stack creation
 #		 Relies on https://review.openstack.org/#/c/95968/
