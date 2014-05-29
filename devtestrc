@@ -64,10 +64,6 @@ export UNDERCLOUD_DIB_EXTRA_ARGS="rabbitmq-server cloud-init-datasources"
 export OVERCLOUD_CONTROL_DIB_EXTRA_ARGS="rabbitmq-server cloud-init-datasources"
 export OVERCLOUD_COMPUTE_DIB_EXTRA_ARGS="cloud-init-datasources"
 
-# NOTE (adam_g): Set a long timeout for stack creation
-#		 Relies on https://review.openstack.org/#/c/95968/
-export OVERCLOUD_STACK_TIMEOUT="120"
-
 [[ -z "$NO_SOURCE_PREP" ]] && bin/prep_source_repos
 
 # Clone our local git copies. Make devtest.sh prefer your local repositories. You'll still need to have stuff checked in to them!

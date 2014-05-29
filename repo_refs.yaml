@@ -24,24 +24,27 @@ repos:
     - os-cloud-config
 
 gerrit_refs:
-    tripleo-incubator:
-        - 53/93553/7
-        - 68/95968/4
-
     tripleo-heat-templates:
+        # https://review.openstack.org/#/c/93806/
         - 06/93806/1
 
     tripleo-image-elements:
+        # https://launchpad.net/bugs/1308680
         - 44/93844/3
+
+        # https://launchpad.net/bugs/1318039
         - 81/94981/1
 
     ironic:
-        - 31/93731/3
-        - 98/96498/3
-        - 11/96611/1
+        # https://launchpad.net/bugs/1319858
+        - 31/93731/4
 
-    heat:
-        - 31/93931/2
+        # https://review.openstack.org/#/c/96498/
+        - 98/96498/3
+
+        # https://launchpad.net/bugs/1324670
+        - 77/96577/3
 
     diskimage-builder:
-        - 98/95598/1
+        # https://launchpad.net/bugs/1316475
+        - 98/95598/3
