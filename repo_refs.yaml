@@ -35,9 +35,6 @@ gerrit_refs:
         # https://review.openstack.org/#/c/93844/
         - 44/93844/4
 
-        # Ironic: set my_ip equal to local-ipv4 (if present)
-        # https://review.openstack.org/#/c/94981/
-        - 81/94981/1
 
     ironic:
         # Allow more time for API requests to be completed
