@@ -22,6 +22,7 @@ repos:
     - tripleo-heat-templates
     - tripleo-image-elements
     - os-cloud-config
+    - tripleo-ci
 
 gerrit_refs:
     tripleo-heat-templates:
