@@ -25,26 +25,33 @@ repos:
 
 gerrit_refs:
     tripleo-heat-templates:
+        # Sequence deploys - compute after control plane.
         # https://review.openstack.org/#/c/93806/
         - 06/93806/1
 
     tripleo-image-elements:
-        # https://launchpad.net/bugs/1308680
+        # Increase the Ironic RPC connection pool size.
+        # https://review.openstack.org/#/c/93844/
         - 44/93844/3
 
-        # https://launchpad.net/bugs/1318039
+        # Ironic: set my_ip equal to local-ipv4 (if present)
+        # https://review.openstack.org/#/c/94981/
         - 81/94981/1
 
     ironic:
-        # https://launchpad.net/bugs/1319858
+        # Allow more time for API requests to be completed
+        # https://review.openstack.org/#/c/93731/
         - 31/93731/4
 
+        # Set instance default_ephemeral_device
         # https://review.openstack.org/#/c/96498/
         - 98/96498/3
 
-        # https://launchpad.net/bugs/1324670
+        # Work around iscsiadm delete failures.
+        # https://review.openstack.org/#/c/96577/
         - 77/96577/3
 
     diskimage-builder:
-        # https://launchpad.net/bugs/1316475
+        # Add new cloud-init-datasources element
+        # https://review.openstack.org/#/c/95598/
         - 98/95598/3
