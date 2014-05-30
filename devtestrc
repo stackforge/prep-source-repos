@@ -14,11 +14,6 @@ export PROXY=${PROXY:-''}
 export TRIPLEO_ROOT=${TRIPLEO_ROOT:-"$PWD/tripleo"}
 export TE_DATAFILE=${TE_DATAFILE:-"$TRIPLEO_ROOT/testenv.json"}
 
-# How much CPU/mem/disk available on nodes
-export NODE_CPU=${NODE_CPU:-24}
-export NODE_MEM=${NODE_MEM:-98304}
-export NODE_DISK=${NODE_DISK:-1600}
-
 export NeutronPublicInterface=eth2
 
 # Scale for overcloud compute/control.
