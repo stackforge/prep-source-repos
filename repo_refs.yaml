@@ -33,7 +33,7 @@ gerrit_refs:
     tripleo-image-elements:
         # Increase the Ironic RPC connection pool size.
         # https://review.openstack.org/#/c/93844/
-        - 44/93844/3
+        - 44/93844/4
 
         # Ironic: set my_ip equal to local-ipv4 (if present)
         # https://review.openstack.org/#/c/94981/
