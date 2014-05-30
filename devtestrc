@@ -61,7 +61,12 @@ export UNDERCLOUD_DIB_EXTRA_ARGS="rabbitmq-server cloud-init-datasources"
 export OVERCLOUD_CONTROL_DIB_EXTRA_ARGS="rabbitmq-server cloud-init-datasources"
 export OVERCLOUD_COMPUTE_DIB_EXTRA_ARGS="cloud-init-datasources"
 
-[[ -z "$NO_SOURCE_PREP" ]] && bin/prep_source_repos
+if [ -z "$NO_SOURCE_PREP" ]; then
+    cd $TRIPLE_ROOT/tripleo-end-to-end
+    bin/prep_source_repos
+    cd -
+fi
+
 
 # Clone our local git copies. Make devtest.sh prefer your local repositories. You'll still need to have stuff checked in to them!
 for n in $TRIPLEO_ROOT/*;
