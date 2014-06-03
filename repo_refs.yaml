@@ -25,7 +25,7 @@ repos:
     - tripleo-ci
 
 gerrit_refs:
-    triplo-incubator:
+    tripleo-incubator:
         # Allow overcloud fixed range to be configurable
         - 26/97626/1
 
