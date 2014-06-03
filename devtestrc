@@ -25,6 +25,9 @@ export FLOATING_START=${FLOATING_START:-"10.22.157.225"}
 export FLOATING_END=${FLOATING_END:-"10.22.157.254"}
 export FLOATING_CIDR=${FLOATING_CIDR:-"10.22.157.244/27"}
 
+# Relies on https://review.openstack.org/97626
+export OVERCLOUD_FIXED_RANGE_CIDR=${OVERCLOUD_FIXED_RANGE_CIDR:-"192.168.10.0/24"}
+
 # Be sure to create a large seed vm
 export SEED_CPU=24
 export SEED_MEM=24576
