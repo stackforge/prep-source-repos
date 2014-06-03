@@ -25,6 +25,10 @@ repos:
     - tripleo-ci
 
 gerrit_refs:
+    triplo-incubator:
+        # Allow overcloud fixed range to be configurable
+        - 26/97626/1
+
     tripleo-heat-templates:
         # Sequence deploys - compute after control plane.
         # https://review.openstack.org/#/c/93806/
