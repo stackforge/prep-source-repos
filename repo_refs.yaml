@@ -29,11 +29,6 @@ gerrit_refs:
         # Allow overcloud fixed range to be configurable
         - 26/97626/2
 
-    tripleo-heat-templates:
-        # Sequence deploys - compute after control plane.
-        # https://review.openstack.org/#/c/93806/
-        - 06/93806/1
-
     tripleo-image-elements:
         # Increase the Ironic RPC connection pool size.
         # https://review.openstack.org/#/c/93844/
