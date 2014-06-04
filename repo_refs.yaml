@@ -42,7 +42,7 @@ gerrit_refs:
 
         # Set instance default_ephemeral_device
         # https://review.openstack.org/#/c/96498/
-        - 98/96498/3
+        - 98/96498/10
 
         # Work around iscsiadm delete failures.
         # https://review.openstack.org/#/c/96577/
