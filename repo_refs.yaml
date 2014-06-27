@@ -33,4 +33,4 @@ gerrit_refs:
     tripleo-heat-templates:
         # Compute all hosts matrix once.
         # https://review.openstack.org/#/c/97703/
-        - 03/97703/3
+        - 03/97703/4
