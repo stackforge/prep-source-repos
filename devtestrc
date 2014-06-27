@@ -45,7 +45,7 @@ if [[ -n "$PYPI_MIRROR" ]] ; then
   export PYPI_MIRROR_URL_1=http://${PYPI_MIRROR}/pypi/latest/Ubuntu-13.10/
 fi
 
-export DIB_COMMON_ELEMENTS="stackuser pypi -u use-ephemeral mellanox"
+export DIB_COMMON_ELEMENTS="$LOCAL_DIB_ELEMENTS stackuser pypi -u use-ephemeral mellanox"
 export DEVTEST_PERF_COMMENT="$(hostname): clean re-run, using USEast pypi mirror."
 
 # same arch as host machine, so the wheels in the mirror work
