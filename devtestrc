@@ -42,7 +42,6 @@ fi
 if [[ -n "$PYPI_MIRROR" ]] ; then
   export PYPI_MIRROR_URL="http://${PYPI_MIRROR}/pypi/latest";   # point this at the pypi mirror.
   export DIB_NO_PYPI_PIP=1 
-  export PYPI_MIRROR_URL_1=http://${PYPI_MIRROR}/pypi/latest/Ubuntu-13.10/
 fi
 
 export DIB_COMMON_ELEMENTS="$LOCAL_DIB_ELEMENTS stackuser pypi -u use-ephemeral mellanox"
