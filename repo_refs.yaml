@@ -34,3 +34,7 @@ gerrit_refs:
         # Move libvirt's qemu configuration dir to state fs
         # https://review.openstack.org/#/c/104407/
         - 07/104407/1
+
+        # Allow single node mysql clusters to restart
+        # https://review.openstack.org/#/c/104455/
+        - 55/104455/5
