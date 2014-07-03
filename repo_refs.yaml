@@ -28,7 +28,7 @@ gerrit_refs:
     ironic:
         # Update nova rebuild to account for new image
         # https://review.openstack.org/#/c/103227/
-        - 27/103227/2
+        - 27/103227/6
 
     tripleo-image-elements:
         # Move libvirt's qemu configuration dir to state fs
