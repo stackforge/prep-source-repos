@@ -23,6 +23,7 @@ repos:
     - tripleo-image-elements
     - os-cloud-config
     - tripleo-ci
+    - dib-utils
 
 gerrit_refs:
     ironic:
