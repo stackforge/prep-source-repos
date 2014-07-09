@@ -39,3 +39,7 @@ gerrit_refs:
         # Allow single node mysql clusters to restart
         # https://review.openstack.org/#/c/104455/
         - 55/104455/5
+
+        # Hack in pending upstream eventlet patch DONT MERGE
+        # https://review.openstack.org/#/c/105304/
+        - 04/105304/1
