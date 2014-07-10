@@ -26,20 +26,23 @@ repos:
     - dib-utils
 
 gerrit_refs:
-    ironic:
-        # Update nova rebuild to account for new image
-        # https://review.openstack.org/#/c/103227/
-        - 27/103227/6
-
     tripleo-image-elements:
         # Move libvirt's qemu configuration dir to state fs
         # https://review.openstack.org/#/c/104407/
         - 07/104407/1
 
-        # Allow single node mysql clusters to restart
-        # https://review.openstack.org/#/c/104455/
-        - 55/104455/5
-
         # Hack in pending upstream eventlet patch DONT MERGE
         # https://review.openstack.org/#/c/105304/
         - 04/105304/1
+
+        # Permit non-loopback guest access to Rabbit
+        # https://review.openstack.org/#/c/92815/
+        #   ^ this was one of the only patches from last round of testing not
+        #   yet merged. not sure its critically required or ?
+        - 15/92815/3
+
+        # Centralize all db migrations to boot-stack element
+        # https://review.openstack.org/#/c/105640/
+        #   ^ not strictly required, as db migrations will happen without
+        #   but not cluster safe
+        - 40/105640/3
