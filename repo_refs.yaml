@@ -27,10 +27,6 @@ repos:
 
 gerrit_refs:
     tripleo-image-elements:
-        # Move libvirt's qemu configuration dir to state fs
-        # https://review.openstack.org/#/c/104407/
-        - 07/104407/1
-
         # Hack in pending upstream eventlet patch DONT MERGE
         # https://review.openstack.org/#/c/105304/
         - 04/105304/1
@@ -44,3 +40,6 @@ gerrit_refs:
         # Run migratins from only the bootstrap host
         # https://review.openstack.org/#/c/106463/
         - 63/106463/3
+
+    tripleo-incubator:
+        - 99/107199/1
