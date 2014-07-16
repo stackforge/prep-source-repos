@@ -41,5 +41,9 @@ gerrit_refs:
         # https://review.openstack.org/#/c/106463/
         - 63/106463/3
 
+        # Move libvirt's qemu configuration dir to state fs
+        # https://review.openstack.org/#/c/107461/
+        - 61/107461/1
+
     tripleo-incubator:
         - 99/107199/1
