@@ -26,6 +26,11 @@ repos:
     - dib-utils
 
 gerrit_refs:
+    ironic:
+        # Fix tear_down a node with missing info
+        # https://review.openstack.org/#/c/103685/
+        - 85/103685/6
+
     tripleo-image-elements:
         # Hack in pending upstream eventlet patch DONT MERGE
         # https://review.openstack.org/#/c/105304/
@@ -37,13 +42,7 @@ gerrit_refs:
         #   yet merged. not sure its critically required or ?
         - 15/92815/3
 
-        # Run migratins from only the bootstrap host
-        # https://review.openstack.org/#/c/106463/
-        - 63/106463/3
-
-        # Move libvirt's qemu configuration dir to state fs
-        # https://review.openstack.org/#/c/107461/
-        - 61/107461/1
-
     tripleo-incubator:
-        - 99/107199/1
+        # User-specified undercloud and overcloud img names
+        # https://review.openstack.org/#/c/107199/
+        - 99/107199/4
