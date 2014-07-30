@@ -34,7 +34,7 @@ gerrit_refs:
     tripleo-image-elements:
         # Hack in pending upstream eventlet patch DONT MERGE
         # https://review.openstack.org/#/c/105304/
-        - 04/105304/1
+        - 04/105304/2
 
         # Permit non-loopback guest access to Rabbit
         # https://review.openstack.org/#/c/92815/
