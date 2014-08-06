@@ -57,7 +57,7 @@ def main():
 
         refs = CONF['gerrit_refs'].get(repo, ())
 
-        git_refs = ['master']
+        git_refs = ['+master:review/master']
         for ref in refs:
             if len(ref.split('/')) != 3:
                 # Weak heuristic, may need fixing.
@@ -88,9 +88,9 @@ def main():
         if ' ' + branch_name in branches:
             print 'Resetting existing branch %s...' % branch_name
             check_call(['git', 'checkout', branch_name], cwd=rd)
-            check_call(['git', 'reset', '--hard', 'origin/master'], cwd=rd)
+            check_call(['git', 'reset', '--hard', 'review/master'], cwd=rd)
         else:
-            check_call(['git', 'checkout', '-b', branch_name, 'origin/master'], cwd=rd)
+            check_call(['git', 'checkout', '-b', branch_name, 'review/master'], cwd=rd)
         for ref in refs:
             if len(ref.split('/')) == 3:
                 ref = 'refs/changes/%s' % ref
