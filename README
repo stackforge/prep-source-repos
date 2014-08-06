@@ -25,3 +25,20 @@ To use:
 
 * proceed with any tripleo activies you might have (building images, deploying,
   etc etc).
+
+## Advanced use
+
+Refs that don't match the xx/yy/zz form of gerrit refs are presumed to be local
+work-in-progress branches. These are not fetched, but are merged into the
+rollup branch along with all the other patches. With a little care this permits
+working effectively with multiple patchsets in one project without them being
+made into a stack in gerrit.
+
+When running prep-source-repos any additional arguments after the refs and
+output dir are used to filter the repositories to fetch - so when working on
+(say) two local orthogonal patches to nova, and you need to update your rollup
+branch just do::
+
+    prep-source-repos foo bar nova
+
+and only nova will be updated.

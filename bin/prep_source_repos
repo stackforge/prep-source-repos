@@ -35,6 +35,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("refs", help="the yaml config file")
     parser.add_argument("output", help="where to put the downloaded repositories")
+    parser.add_argument("repos", help="what repos to update", nargs="*")
     args = parser.parse_args()
     SRC_ROOT = os.path.abspath(args.output)
     with open(args.refs, 'rt') as arg_file:
@@ -47,6 +48,8 @@ def main():
     variables = []
 
     for repo, remote in CONF['repos'].items():
+        if args.repos and repo not in args.repos:
+            continue
         rd = os.path.join(SRC_ROOT, repo)
 
         if not os.path.isdir(os.path.join(rd)):
@@ -56,6 +59,9 @@ def main():
 
         git_refs = ['master']
         for ref in refs:
+            if len(ref.split('/')) != 3:
+                # Weak heuristic, may need fixing.
+                continue
             git_refs.append(
                 '+refs/changes/%(ref)s:refs/changes/%(ref)s' % dict(ref=ref))
             #print ' '.join(['git', 'pull', remote, ref])
@@ -67,8 +73,14 @@ def main():
         if not refs:
             branch_name = 'master'
         else:
-            branch_name = 'rollup_' + \
-                      '_'.join([r[1] for r in [ref.split('/') for ref in refs]])
+            components = []
+            for ref in refs:
+                segments = ref.split('/')
+                if len(segments) == 3:
+                    components.append(segments[1])
+                else:
+                    components.append(ref)
+            branch_name = 'rollup_' + '_'.join(components)
         check_call(['git', 'stash'], cwd=rd)
         branches = check_output(['git', 'branch', '-a'], cwd=rd)
         if ' ' + branch_name in branches:
@@ -78,8 +90,9 @@ def main():
         else:
             check_call(['git', 'checkout', '-b', branch_name, 'origin/master'], cwd=rd)
         for ref in refs:
-            check_call(
-                ['git', 'merge', '--no-edit', 'refs/changes/%s' % ref], cwd=rd)
+            if len(ref.split('/')) == 3:
+                ref = 'refs/changes/%s' % ref
+            check_call(['git', 'merge', '--no-edit', ref], cwd=rd)
         normalised_repo = re.sub('[^A-Za-z0-9_]', '_', repo)
         if repo not in CONF['gerrit_refs']:
             print 'no refs for %s' % repo
