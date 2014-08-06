@@ -1,0 +1,16 @@
+Here we find:
+
+* sample nodes.json and networks.json files
+
+* an example devtestrc which we use when testing in one of the HP test racks
+
+To use:
+
+* follow the main readme to get your source repos downloaded and variables
+  defined.
+
+* create appropriate customised nodes and network json files
+
+* run it::
+
+    devtest.sh  --trash-my-machine --nodes $PATH_TO/nodes.json --bm-networks $PATH_TO/bm-network.json

@@ -5,6 +5,8 @@ TripleO (or other gerrit based projects).
    which will also export an rc file with git refs based on the combined
    branches
  - a sample config file that we're using (repo_refs.yaml)
+ - some example inputs for doing rack testing of tripleo in the rack-testing
+   subdir
 
 To use:
 
@@ -15,7 +17,8 @@ To use:
   specific scripts into place, or $up to you).
 
 * run prep_source_repos $YOUR\_REFS\_FILE $TRIPLEO\_ROOT to checkout and update
-  the repositories specified by the refs file
+  the repositories specified by the refs file. Note that local edits are saved
+  via git stash whenever you refresh your source repos.
 
 * source YOUR_REFS_FILE.variables to configure TripleO scripts to use your
   freshly integrated branches
