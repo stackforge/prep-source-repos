@@ -1,51 +1,101 @@
 #!/usr/bin/python
 
-import yaml
+import argparse
+import os.path
+import re
 from subprocess import check_call, check_output
-import os
+import sys
+import yaml
 
-SRC_ROOT = os.getenv('TRIPLEO_ROOT', 'tripleo')
-CONF = 'repo_refs.yaml'
-CONF = yaml.load(open(CONF).read())
-GIT_SERVER = 'http://review.openstack.org'
 
-if not os.path.isdir(SRC_ROOT):
-    os.mkdir(SRC_ROOT)
+def normalise_conf(conf):
+    """generate full paths etc for easy application later."""
+    def make_repos(thing, path_stack):
+        if isinstance(thing, dict):
+            repos = {}
+            for key, subthing in thing.items():
+                path = path_stack + (key,)
+                repos.update(make_repos(subthing, path))
+            return repos
+        elif isinstance(thing, list):
+            path = '/'.join(path_stack)
+            repos = {}
+            for name in thing:
+                if name in repos:
+                    raise ValueError("%r defined multiple times" % name)
+                repos[name] = '%s/%s' % (path, name)
+            return repos
+        else:
+            raise ValueError("%r is not a dict or list" % (thing,))
+    conf['repos'] = make_repos(conf['repos'], ())
+    return conf
 
-for repo in CONF['repos']:
-    rd = os.path.join(SRC_ROOT, repo)
-    if repo in ['tripleo-ci']:
-        org = 'openstack-infra'
-    else:
-        org = 'openstack'
 
-    remote = GIT_SERVER + '/%s/%s' % (org, repo)
-    if os.path.isdir(os.path.join(rd)):
-        check_call(['git', 'checkout', 'master'], cwd=rd)
-        check_call(['git', 'pull'], cwd=rd)
-    else:
-        check_call(['git', 'clone', remote, rd])
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("refs", help="the yaml config file")
+    parser.add_argument("output", help="where to put the downloaded repositories")
+    args = parser.parse_args()
+    SRC_ROOT = os.path.abspath(args.output)
+    with open(args.refs, 'rt') as arg_file:
+        CONF = yaml.safe_load(arg_file.read())
+    CONF = normalise_conf(CONF)
 
-    if repo not in CONF['gerrit_refs']:
-        print 'no refs for %s' % repo
-        continue
+    if not os.path.lexists(SRC_ROOT):
+        os.makedirs(SRC_ROOT)
 
-    refs = CONF['gerrit_refs'][repo]
-    branch_name = 'rollup_' + \
-                  '_'.join([r[1] for r in [ref.split('/') for ref in refs]])
+    variables = []
 
-    branches = check_output(['git', 'branch', '-a'], cwd=rd)
+    for repo, remote in CONF['repos'].items():
+        rd = os.path.join(SRC_ROOT, repo)
 
-    if branch_name in branches:
-        print 'Deleting existing branch %s...' % branch_name
-        check_call(['git', 'branch', '-D', branch_name], cwd=rd)
+        if not os.path.isdir(os.path.join(rd)):
+            check_call(['git', 'clone', remote, rd])
 
-    check_call(['git', 'checkout', '-b', branch_name], cwd=rd)
-    check_call(['git', 'branch', '--set-upstream-to=origin/master'], cwd=rd)
+        refs = CONF['gerrit_refs'].get(repo, ())
 
-    for ref in CONF['gerrit_refs'][repo]:
-        _, rev, p = ref.split('/')
-        print 'pulling %s' % (GIT_SERVER + '/#/c/' + rev)
-        print ' '.join(['git', 'pull', remote, ref])
-        check_call(['git', 'pull', '--no-edit', remote, 'refs/changes/' + ref],
-                   cwd=rd)
+        git_refs = ['master']
+        for ref in refs:
+            git_refs.append(
+                '+refs/changes/%(ref)s:refs/changes/%(ref)s' % dict(ref=ref))
+            #print ' '.join(['git', 'pull', remote, ref])
+            #check_call(['git', 'pull', '--no-edit', remote, 'refs/changes/' + ref],
+            #           cwd=rd)
+        print 'fetching from %s %s' % (remote, git_refs)
+        check_call(['git', 'fetch', remote] + git_refs, cwd=rd)
+
+        if not refs:
+            branch_name = 'master'
+        else:
+            branch_name = 'rollup_' + \
+                      '_'.join([r[1] for r in [ref.split('/') for ref in refs]])
+        check_call(['git', 'stash'], cwd=rd)
+        branches = check_output(['git', 'branch', '-a'], cwd=rd)
+        if ' ' + branch_name in branches:
+            print 'Resetting existing branch %s...' % branch_name
+            check_call(['git', 'checkout', branch_name], cwd=rd)
+            check_call(['git', 'reset', '--hard', 'origin/master'], cwd=rd)
+        else:
+            check_call(['git', 'checkout', '-b', branch_name, 'origin/master'], cwd=rd)
+        for ref in refs:
+            check_call(
+                ['git', 'merge', '--no-edit', 'refs/changes/%s' % ref], cwd=rd)
+        normalised_repo = re.sub('[^A-Za-z0-9_]', '_', repo)
+        if repo not in CONF['gerrit_refs']:
+            print 'no refs for %s' % repo
+            variables.append((normalised_repo, rd, None))
+        else:
+            variables.append((normalised_repo, rd, branch_name))
+
+    with open(args.refs + '.variables', 'wt') as output:
+        for name, location, ref in variables:
+            output.write('export DIB_REPOTYPE_%s=git\n' % name)
+            output.write('export DIB_REPOLOCATION_%s=%s\n' % (name, location))
+            if ref:
+                output.write('export DIB_REPOREF_%s=%s\n' % (name, ref))
+            else:
+                output.write('unset DIB_REPOREF_%s\n'% name)
+    return 0
+
+
+sys.exit(main())

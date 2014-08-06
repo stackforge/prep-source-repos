@@ -1,31 +1,40 @@
+# hash of repos to download
 repos:
-    - diskimage-builder
-    - horizon
-    - tripleo-incubator
-    - python-keystoneclient
-    - python-glanceclient
-    - swift
-    - glance
-    - python-neutronclient
-    - python-ceilometerclient
-    - neutron
-    - python-heatclient
-    - python-swiftclient
-    - keystone
+  # each hash becomes a path component
+  http://review.openstack.org:
+    # until we get down to a list
+    openstack:
+    # at which point we're naming a repo and downloading it to disk as ./$name
     - cinder
-    - python-cinderclient
-    - nova
-    - python-ironicclient
-    - python-novaclient
+    - dib-utils
+    - diskimage-builder
+    - glance
     - heat
+    - horizon
     - ironic
+    - keystone
+    - neutron
+    - nova
+    - os-cloud-config
+    - python-ceilometerclient
+    - python-cinderclient
+    - python-glanceclient
+    - python-heatclient
+    - python-ironicclient
+    - python-keystoneclient
+    - python-neutronclient
+    - python-novaclient
+    - python-swiftclient
+    - swift
     - tripleo-heat-templates
     - tripleo-image-elements
-    - os-cloud-config
+    - tripleo-incubator
+    openstack-infra:
     - tripleo-ci
-    - dib-utils
 
+# A list of patches to pull from gerrit into repos
 gerrit_refs:
+    # The name of said repo from above.
     ironic:
         # Fix tear_down a node with missing info
         # https://review.openstack.org/#/c/103685/

@@ -1,24 +1,24 @@
-This repository is a place for testers of full rack end-to-end TripleO
-runs to coordinate around reproducible deployments.
+This repository contains scripts for managing multiple outstanding patches to
+TripleO (or other gerrit based projects).
 
-repo_refs.yaml contains the various repos TripleO will clone and allows
-you to track in-flight Gerrit reviews that need to be pulled down as
-part of the deployment.
+ - tooling to combine arbitrary unmerged gerrit patches (prep_source_repos)
+   which will also export an rc file with git refs based on the combined
+   branches
+ - a sample config file that we're using (repo_refs.yaml)
 
 To use:
 
-Ideally, maintain a local rc file with environment variables specific
-to your environment.  To view which you should be setting, see top of
-devtestrc.
+* create a repo_refs.yaml in your TRIPLEO_ROOT (see the one in the root of this
+  repository for inspiration).
 
-You'll also want to maintain a nodes.json and bm-network.json specific
-to your node inventory and seed/undercloud network topology. See examples.
+* add the tripleo-end-to-end bin directory to your path (or symlink the
+  specific scripts into place, or $up to you).
 
-With your local overrides and nodes.json and bm-network.json in place, simply
-source devtestrc.  This will clone all required repos and patches every time
-its sourced.  To skip this part, set NO_SOURCE_PREP=1.  Note without this set,
-you'll likely lose local changes to the repos upon resourcing.
+* run prep_source_repos $YOUR\_REFS\_FILE $TRIPLEO\_ROOT to checkout and update
+  the repositories specified by the refs file
 
-Then you may simply run:
+* source YOUR_REFS_FILE.variables to configure TripleO scripts to use your
+  freshly integrated branches
 
-devtest.sh  --trash-my-machine --nodes $PATH_TO/nodes.json --bm-networks $PATH_TO/bm-network.json
+* proceed with any tripleo activies you might have (building images, deploying,
+  etc etc).
