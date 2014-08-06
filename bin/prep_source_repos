@@ -81,7 +81,9 @@ def main():
                 else:
                     components.append(ref)
             branch_name = 'rollup_' + '_'.join(components)
-        check_call(['git', 'stash'], cwd=rd)
+        dirty = check_output(['git', 'status', '-z', '-uno'], cwd=rd)
+        if dirty:
+            check_call(['git', 'stash'], cwd=rd)
         branches = check_output(['git', 'branch', '-a'], cwd=rd)
         if ' ' + branch_name in branches:
             print 'Resetting existing branch %s...' % branch_name
@@ -93,6 +95,8 @@ def main():
             if len(ref.split('/')) == 3:
                 ref = 'refs/changes/%s' % ref
             check_call(['git', 'merge', '--no-edit', ref], cwd=rd)
+        if dirty:
+            check_call(['git', 'stash', 'pop'], cwd=rd)
         normalised_repo = re.sub('[^A-Za-z0-9_]', '_', repo)
         if repo not in CONF['gerrit_refs']:
             print 'no refs for %s' % repo

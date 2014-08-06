@@ -8,7 +8,7 @@ TripleO (or other gerrit based projects).
  - some example inputs for doing rack testing of tripleo in the rack-testing
    subdir
 
-To use:
+## Usage
 
 * create a repo_refs.yaml in your TRIPLEO_ROOT (see the one in the root of this
   repository for inspiration).
@@ -18,7 +18,10 @@ To use:
 
 * run prep_source_repos $YOUR\_REFS\_FILE $TRIPLEO\_ROOT to checkout and update
   the repositories specified by the refs file. Note that local edits are saved
-  via git stash whenever you refresh your source repos.
+  via git stash whenever you refresh your source repos, and restored after the
+  update (which may, of course, fail). This provides a convenient way to use
+  local edits / work in progress for repositories that are used directly (vs
+  e.g. those that are cloned into images).
 
 * source YOUR_REFS_FILE.variables to configure TripleO scripts to use your
   freshly integrated branches
