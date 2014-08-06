@@ -35,8 +35,6 @@ repos:
 # A list of patches to pull from gerrit into repos
 gerrit_refs:
     # The name of said repo from above.
-    nova:
-     - foo
     ironic:
         # Fix tear_down a node with missing info
         # https://review.openstack.org/#/c/103685/
