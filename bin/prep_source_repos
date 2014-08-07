@@ -1,15 +1,22 @@
 #!/usr/bin/python
 
 import argparse
+import json
 import os.path
 import re
 from subprocess import check_call, check_output
 import sys
 import yaml
 
+import requests
+
 
 def normalise_conf(conf):
-    """generate full paths etc for easy application later."""
+    """generate full paths etc for easy application later.
+    
+    The resulting structure is:
+    basename -> (remotebase, gerrit_API_base).
+    """
     def make_repos(thing, path_stack):
         if isinstance(thing, dict):
             repos = {}
@@ -23,7 +30,7 @@ def normalise_conf(conf):
             for name in thing:
                 if name in repos:
                     raise ValueError("%r defined multiple times" % name)
-                repos[name] = '%s/%s' % (path, name)
+                repos[name] = ('%s/%s' % (path, name), path_stack[0])
             return repos
         else:
             raise ValueError("%r is not a dict or list" % (thing,))
@@ -46,8 +53,11 @@ def main():
         os.makedirs(SRC_ROOT)
 
     variables = []
+    session = requests.Session()
+    session.headers = {'Accept': 'application/json', 'Accept-Encoding': 'gzip'}
+    resolved_refs = {}
 
-    for repo, remote in CONF['repos'].items():
+    for repo, (remote, gerrit) in CONF['repos'].items():
         if args.repos and repo not in args.repos:
             continue
         rd = os.path.join(SRC_ROOT, repo)
@@ -59,14 +69,24 @@ def main():
 
         git_refs = ['+master:review/master']
         for ref in refs:
-            if len(ref.split('/')) != 3:
+            segments = ref.split('/')
+            if len(segments) != 3:
                 # Weak heuristic, may need fixing.
                 continue
+            if segments[2] == '0':
+                # pull the latest edition
+                gerrit_url = gerrit + ('/changes/?q=%s&o=CURRENT_REVISION'
+                    % segments[1])
+                details = json.loads(session.get(gerrit_url).text[4:])
+                src = details[0]['revisions'].values()[0]['fetch'].values()[0]
+                rref = src['ref']
+                print("Resolved ref %s to %s" % (ref, rref))
+                resolved_refs[ref] = rref
+            else:
+                rref = 'refs/changes/%(ref)s' % dict(ref=ref)
+
             git_refs.append(
-                '+refs/changes/%(ref)s:refs/changes/%(ref)s' % dict(ref=ref))
-            #print ' '.join(['git', 'pull', remote, ref])
-            #check_call(['git', 'pull', '--no-edit', remote, 'refs/changes/' + ref],
-            #           cwd=rd)
+                '+%(rref)s:%(rref)s' % dict(rref=rref))
         print 'fetching from %s %s' % (remote, git_refs)
         check_call(['git', 'fetch', remote] + git_refs, cwd=rd)
 
@@ -92,8 +112,12 @@ def main():
         else:
             check_call(['git', 'checkout', '-b', branch_name, 'review/master'], cwd=rd)
         for ref in refs:
-            if len(ref.split('/')) == 3:
-                ref = 'refs/changes/%s' % ref
+            segments = ref.split('/')
+            if len(segments) == 3:
+                if ref in resolved_refs:
+                    ref = resolved_refs[ref]
+                else:
+                    ref = 'refs/changes/%s' % ref
             check_call(['git', 'merge', '--no-edit', ref], cwd=rd)
         if dirty:
             check_call(['git', 'stash', 'pop'], cwd=rd)

@@ -37,6 +37,9 @@ rollup branch along with all the other patches. With a little care this permits
 working effectively with multiple patchsets in one project without them being
 made into a stack in gerrit.
 
+Refs of the form xx/yy/0 are late-bound references to gerrit - they will use
+the gerrit REST API to find out the latest version and will use that.
+
 When running prep-source-repos any additional arguments after the refs and
 output dir are used to filter the repositories to fetch - so when working on
 (say) two local orthogonal patches to nova, and you need to update your rollup

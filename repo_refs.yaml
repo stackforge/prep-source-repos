@@ -1,6 +1,7 @@
 # hash of repos to download
 repos:
   # each hash becomes a path component
+  # The top one must be the API server root for gerrit's REST API.
   http://review.openstack.org:
     # until we get down to a list
     openstack:
@@ -38,12 +39,12 @@ gerrit_refs:
     ironic:
         # Fix tear_down a node with missing info
         # https://review.openstack.org/#/c/103685/
-        - 85/103685/6
+        - 85/103685/0
 
     tripleo-image-elements:
         # Hack in pending upstream eventlet patch DONT MERGE
         # https://review.openstack.org/#/c/105304/
-        - 04/105304/2
+        - 04/105304/0
 
         # Permit non-loopback guest access to Rabbit
         # https://review.openstack.org/#/c/92815/
