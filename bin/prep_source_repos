@@ -118,6 +118,7 @@ def main():
                     ref = resolved_refs[ref]
                 else:
                     ref = 'refs/changes/%s' % ref
+            print 'merging in %s' % ref
             check_call(['git', 'merge', '--no-edit', ref], cwd=rd)
         if dirty:
             check_call(['git', 'stash', 'pop'], cwd=rd)
