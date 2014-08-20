@@ -1,19 +1,20 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import argparse
 import json
 import os.path
 import re
-from subprocess import check_call, check_output
+from subprocess import check_call
+from subprocess import check_output
 import sys
-import yaml
 
+import yaml
 import requests
 
 
 def normalise_conf(conf):
     """generate full paths etc for easy application later.
-    
+
     The resulting structure is:
     basename -> (remotebase, gerrit_API_base).
     """
@@ -41,7 +42,8 @@ def normalise_conf(conf):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("refs", help="the yaml config file")
-    parser.add_argument("output", help="where to put the downloaded repositories")
+    parser.add_argument("output",
+                        help="where to put the downloaded repositories")
     parser.add_argument("repos", help="what repos to update", nargs="*")
     args = parser.parse_args()
     SRC_ROOT = os.path.abspath(args.output)
@@ -76,7 +78,7 @@ def main():
             if segments[2] == '0':
                 # pull the latest edition
                 gerrit_url = gerrit + ('/changes/?q=%s&o=CURRENT_REVISION'
-                    % segments[1])
+                                       % segments[1])
                 details = json.loads(session.get(gerrit_url).text[4:])
                 src = details[0]['revisions'].values()[0]['fetch'].values()[0]
                 rref = src['ref']
@@ -87,7 +89,7 @@ def main():
 
             git_refs.append(
                 '+%(rref)s:%(rref)s' % dict(rref=rref))
-        print 'fetching from %s %s' % (remote, git_refs)
+        print('fetching from %s %s' % (remote, git_refs))
         check_call(['git', 'fetch', remote] + git_refs, cwd=rd)
 
         if not refs:
@@ -106,11 +108,12 @@ def main():
             check_call(['git', 'stash'], cwd=rd)
         branches = check_output(['git', 'branch', '-a'], cwd=rd)
         if ' ' + branch_name in branches:
-            print 'Resetting existing branch %s...' % branch_name
+            print('Resetting existing branch %s...' % branch_name)
             check_call(['git', 'checkout', branch_name], cwd=rd)
             check_call(['git', 'reset', '--hard', 'review/master'], cwd=rd)
         else:
-            check_call(['git', 'checkout', '-b', branch_name, 'review/master'], cwd=rd)
+            check_call(['git', 'checkout', '-b', branch_name,
+                        'review/master'], cwd=rd)
         for ref in refs:
             segments = ref.split('/')
             if len(segments) == 3:
@@ -118,13 +121,13 @@ def main():
                     ref = resolved_refs[ref]
                 else:
                     ref = 'refs/changes/%s' % ref
-            print 'merging in %s' % ref
+            print('merging in %s' % ref)
             check_call(['git', 'merge', '--no-edit', ref], cwd=rd)
         if dirty:
             check_call(['git', 'stash', 'pop'], cwd=rd)
         normalised_repo = re.sub('[^A-Za-z0-9_]', '_', repo)
         if repo not in CONF['gerrit_refs']:
-            print 'no refs for %s' % repo
+            print('no refs for %s' % repo)
             variables.append((normalised_repo, rd, None))
         else:
             variables.append((normalised_repo, rd, branch_name))
@@ -136,7 +139,7 @@ def main():
             if ref:
                 output.write('export DIB_REPOREF_%s=%s\n' % (name, ref))
             else:
-                output.write('unset DIB_REPOREF_%s\n'% name)
+                output.write('unset DIB_REPOREF_%s\n' % name)
     return 0
 
 

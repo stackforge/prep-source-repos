@@ -1,0 +1,67 @@
+CHANGES
+=======
+
+* Reformat README as RST
+* Rename readme
+
+0.0.1
+-----
+
+* Add tox.ini
+* Remove rack-testing - not relevant to prep_source_repos
+* Basic packageization
+* Add basic requirements
+* Update .gitignore to ignore virtualenv cruft
+* Enable use of local reference directories
+* Add --clean to reset all repos to upstream master
+* Enable use inside a virtualenv
+* Show what we're merging
+* Late bound references for the win
+* Handle repos with wonky origin
+* Fix cruft in refs
+* Preserve uncommitted changes
+* And now make it cool
+* Ignore things we don't want checked in
+* More README and move rack testing to a subdir
+* Overhaul prep-source-repos
+* Update devtestrc
+* Update repo_refs
+* Update repo_refs.yaml
+* Update repo_refs.yaml
+* Update repo_refs.yaml
+* update repo_refs.yaml
+* Update repo_refs with current minimum patch set
+* Pull in eventlet fix
+* Add dib-utils
+* Add 104455
+* Bump to patchset 6 for 103227
+* Add 104407
+* Drop patch 97703 (merged)
+* devtestrc: Allow SEED_* to be specified
+* Bump 97703 to patchset #5
+* Drop PYPI_MIRROR_URL_1
+* Add LOCAL_DIB_ELEMENTS
+* Bump 97703 to patchset 4
+* Update repo_refs /w patch for bug #1334905
+* Add tripleo-heat-templates review 97703
+* Clear repo_refs for new round of testing
+* Bump patchset 10 for 96498
+* 93806 Merged, drop from repo_refs.yaml
+* Bump patchset for 97626
+* Set default OVERCLOUD_FIXED_RANGE_CIDR in devtestrc
+* Typo
+* Adds t-o-i rev. 97626
+* Update repo_refs.yaml
+* Update repo_refs.yaml
+* Add tripleo-ci repo
+* Update devtestrc
+* repo_refs.yaml: Update context
+* Cleanout repo refs, remove timeout, add 93731 as better iscsiadm workaround
+* Add 96611, test workaround for bug 1324670
+* Update repo_refs: Adds 96498
+* Allow FLOATING_* to be set locally
+* Set OVERCLOUD_{COMPUTE,CONTROL}_DIB_EXTRA_ARGS
+* CONTROLSCALE=1
+* Set USE_IRONIC=1
+* Set seed vm specs
+* INIT
