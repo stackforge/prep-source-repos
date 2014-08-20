@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import argparse
 import json
@@ -13,7 +13,7 @@ import requests
 
 def normalise_conf(conf):
     """generate full paths etc for easy application later.
-    
+
     The resulting structure is:
     basename -> (remotebase, gerrit_API_base).
     """
@@ -41,7 +41,8 @@ def normalise_conf(conf):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("refs", help="the yaml config file")
-    parser.add_argument("output", help="where to put the downloaded repositories")
+    parser.add_argument("output",
+                        help="where to put the downloaded repositories")
     parser.add_argument("repos", help="what repos to update", nargs="*")
     args = parser.parse_args()
     SRC_ROOT = os.path.abspath(args.output)
@@ -76,7 +77,7 @@ def main():
             if segments[2] == '0':
                 # pull the latest edition
                 gerrit_url = gerrit + ('/changes/?q=%s&o=CURRENT_REVISION'
-                    % segments[1])
+                                       % segments[1])
                 details = json.loads(session.get(gerrit_url).text[4:])
                 src = details[0]['revisions'].values()[0]['fetch'].values()[0]
                 rref = src['ref']
@@ -110,7 +111,8 @@ def main():
             check_call(['git', 'checkout', branch_name], cwd=rd)
             check_call(['git', 'reset', '--hard', 'review/master'], cwd=rd)
         else:
-            check_call(['git', 'checkout', '-b', branch_name, 'review/master'], cwd=rd)
+            check_call(['git', 'checkout', '-b', branch_name,
+                        'review/master'], cwd=rd)
         for ref in refs:
             segments = ref.split('/')
             if len(segments) == 3:
@@ -136,7 +138,7 @@ def main():
             if ref:
                 output.write('export DIB_REPOREF_%s=%s\n' % (name, ref))
             else:
-                output.write('unset DIB_REPOREF_%s\n'% name)
+                output.write('unset DIB_REPOREF_%s\n' % name)
     return 0
 
 
