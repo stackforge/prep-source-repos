@@ -1,3 +1,6 @@
 .*.swp
 *~
-repo_refs.yaml.variables
+.Python
+bin/
+include/
+lib/
