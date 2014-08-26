@@ -43,6 +43,11 @@ def main():
     parser.add_argument("refs", help="the yaml config file")
     parser.add_argument("output", help="where to put the downloaded repositories")
     parser.add_argument("repos", help="what repos to update", nargs="*")
+    parser.add_argument("--reference", "-r", help="If set, any git clone "
+                        "operations will look for a local repository to set "
+                        "as a reference, to save downloading again."
+                        "Use this multiple times to set mutiple paths to "
+                        "hunt for local references", action="append")
     args = parser.parse_args()
     SRC_ROOT = os.path.abspath(args.output)
     with open(args.refs, 'rt') as arg_file:
@@ -58,12 +63,24 @@ def main():
     resolved_refs = {}
 
     for repo, (remote, gerrit) in CONF['repos'].items():
+        print repo, remote, gerrit
+        pass
         if args.repos and repo not in args.repos:
             continue
         rd = os.path.join(SRC_ROOT, repo)
 
         if not os.path.isdir(os.path.join(rd)):
-            check_call(['git', 'clone', remote, rd])
+            clone_args = ['git', 'clone']
+            if args.reference:
+                for dir in args.reference:
+                    reference_dir = os.path.join(dir, repo)
+                    print "Checking %s" % reference_dir
+                    if os.path.isdir(reference_dir):
+                        clone_args += ['--reference', reference_dir]
+                        continue
+            clone_args += [remote, rd]
+            print "CLONING: %s" % clone_args
+            check_call(clone_args)
 
         refs = CONF['gerrit_refs'].get(repo, ())
 
