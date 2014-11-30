@@ -2,18 +2,23 @@
 
 import argparse
 import json
+import logging
 import os.path
 import re
 from subprocess import check_call, check_output
 import sys
+
 import yaml
 
 import requests
+import zuul.merger.merger
+import zuul.model
 
+logging.basicConfig(level=logging.DEBUG)
 
 def normalise_conf(conf):
     """generate full paths etc for easy application later.
-    
+
     The resulting structure is:
     basename -> (remotebase, gerrit_API_base).
     """
@@ -48,22 +53,23 @@ def main():
     with open(args.refs, 'rt') as arg_file:
         CONF = yaml.safe_load(arg_file.read())
     CONF = normalise_conf(CONF)
-
-    if not os.path.lexists(SRC_ROOT):
-        os.makedirs(SRC_ROOT)
+    extra_config = CONF['config']
 
     variables = []
     session = requests.Session()
     session.headers = {'Accept': 'application/json', 'Accept-Encoding': 'gzip'}
     resolved_refs = {}
 
+    merger = zuul.merger.merger.Merger(SRC_ROOT,
+                                       extra_config['ssh_key'], extra_config['email'],
+                                       extra_config['username'])
+
     for repo, (remote, gerrit) in CONF['repos'].items():
         if args.repos and repo not in args.repos:
             continue
         rd = os.path.join(SRC_ROOT, repo)
-
-        if not os.path.isdir(os.path.join(rd)):
-            check_call(['git', 'clone', remote, rd])
+        git_repo = merger.addProject(repo, remote)
+        git_repo.update()
 
         refs = CONF['gerrit_refs'].get(repo, ())
 
@@ -111,6 +117,9 @@ def main():
             check_call(['git', 'reset', '--hard', 'review/master'], cwd=rd)
         else:
             check_call(['git', 'checkout', '-b', branch_name, 'review/master'], cwd=rd)
+
+        merge_items = []
+
         for ref in refs:
             segments = ref.split('/')
             if len(segments) == 3:
@@ -119,7 +128,15 @@ def main():
                 else:
                     ref = 'refs/changes/%s' % ref
             print 'merging in %s' % ref
-            check_call(['git', 'merge', '--no-edit', ref], cwd=rd)
+            merge_item = { "number": ref.split('/')[1], "patchset":
+                           ref.split('/')[2], "project": repo, "url": remote,
+                           "branch": branch_name, 'refspec': ref, 'ref': ref,
+                           "merge_mode": zuul.model.MERGER_CHERRY_PICK }
+            merge_items.append(merge_item)
+
+        if merge_items:
+            merger.mergeChanges(merge_items)
+
         if dirty:
             check_call(['git', 'stash', 'pop'], cwd=rd)
         normalised_repo = re.sub('[^A-Za-z0-9_]', '_', repo)
@@ -138,6 +155,3 @@ def main():
             else:
                 output.write('unset DIB_REPOREF_%s\n'% name)
     return 0
-
-
-sys.exit(main())
