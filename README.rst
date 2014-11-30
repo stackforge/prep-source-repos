@@ -59,3 +59,29 @@ rollup branch just do::
     prep-source-repos foo bar nova
 
 and only nova will be updated.
+
+Related tools
+=============
+
+Zuul has a Merger [1]_ class which does something very similar to the
+merging aspects of this tool, and a cloner tool [2]_ which does
+something similar to the clone-a-bunch-of-repos aspects of this tool.
+
+However, zuul is intended to be used in automated pipelines. The
+merger library doesn't do quite what this tool does (although an
+attempt to use zuul's merger has been made) [3]_ and the cloner assumes
+that a zuul server has already done the merging.
+
+If you're planning to do automated merges as part of an automated
+build pipeline, zuul is probably the tool you want to use, not this.
+
+If you're looking for manual checkout-out-and-merge as part of a
+manual build process, this tool is probably more suited to your needs.
+
+It would be nice if the two code-bases could merge - or at least, if
+this tool could use zuul's library's in future. That doesn't seem
+impossible. Patches welcome.
+
+.. [1] http://git.openstack.org/cgit/openstack-infra/zuul/tree/zuul/merger/merger.py
+.. [2] http://git.openstack.org/cgit/openstack-infra/zuul/tree/zuul/lib/cloner.py
+.. [3] https://review.openstack.org/#/c/137959/
